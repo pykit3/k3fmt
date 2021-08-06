@@ -1,0 +1,6 @@
+_extends: gh-config
+
+repository:
+  description: It provides with several string operation functions.
+  homepage: https://blog.openacid.com
+  topics: python, string, fmt
