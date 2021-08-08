@@ -14,7 +14,7 @@ setuptools.setup(
     keywords=['python', 'string', 'fmt'],
     python_requires='>=3.0',
 
-    install_requires=['k3ut<0.2,>=0.1.15', 'k3color>=0.1.0,<0.2', 'k3proc>=0.2.0,<0.3'],
+    install_requires=['k3ut>=0.1.15,<0.2', 'k3color>=0.1.0,<0.2', 'k3proc<0.3,>=0.2.0'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
