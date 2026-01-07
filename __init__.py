@@ -14,8 +14,9 @@ This library is considered production ready.
 # from .proc import CalledProcessError
 # from .proc import ProcError
 
-__version__ = "0.1.0"
-__name__ = "k3fmt"
+from importlib.metadata import version
+
+__version__ = version("k3fmt")
 
 from .strutil import (
     format_line,
@@ -32,15 +33,14 @@ from .strutil import (
 
 
 __all__ = [
-    'format_line',
-
-    'parse_colon_kvs',
-    'tokenize',
-    'line_pad',
-    'break_line',
-    'struct_repr',
-    'format_table',
-    'filter_invisible_chars',
-    'utf8str',
-    'page',
+    "format_line",
+    "parse_colon_kvs",
+    "tokenize",
+    "line_pad",
+    "break_line",
+    "struct_repr",
+    "format_table",
+    "filter_invisible_chars",
+    "utf8str",
+    "page",
 ]

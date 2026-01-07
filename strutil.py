@@ -7,20 +7,20 @@ import k3color
 
 listtype = (tuple, list)
 
-invisible_chars = ''.join(map(chr, list(range(0, 32))))
-invisible_chars_re = re.compile('[%s]' % re.escape(invisible_chars))
+invisible_chars = "".join(map(chr, list(range(0, 32))))
+invisible_chars_re = re.compile("[%s]" % re.escape(invisible_chars))
 
 
 def break_line(linestr, width):
     lines = linestr.splitlines()
     rst = []
 
-    space = ' '
+    space = " "
     if isinstance(linestr, k3color.Str):
-        space = k3color.Str(' ')
+        space = k3color.Str(" ")
 
     for line in lines:
-        words = line.split(' ')
+        words = line.split(" ")
 
         buf = words[0]
         for word in words[1:]:
@@ -30,13 +30,13 @@ def break_line(linestr, width):
             else:
                 buf += space + word
 
-        if buf != '':
+        if buf != "":
             rst.append(buf)
 
     return rst
 
 
-def line_pad(linestr, padding=''):
+def line_pad(linestr, padding=""):
     """
 
     :param linestr: multiple line string with `\n` as line separator.
@@ -95,9 +95,8 @@ def struct_repr(data, key=None):
     # 2 : 5
 
     if type(data) in listtype:
-
         if len(data) == 0:
-            return ['[]']
+            return ["[]"]
 
         max_width = 0
         elt_lines = []
@@ -112,22 +111,20 @@ def struct_repr(data, key=None):
 
         lines = []
         for sublines in elt_lines:
-
             # - subline[0]
             #   subline[1]
             #   ...
 
-            lines.append('- ' + sublines[0].ljust(max_width))
+            lines.append("- " + sublines[0].ljust(max_width))
 
-            for l in sublines[1:]:
-                lines.append('  ' + l.ljust(max_width))
+            for line in sublines[1:]:
+                lines.append("  " + line.ljust(max_width))
 
         return lines
 
-    elif type(data) == dict:
-
+    elif type(data) is dict:
         if len(data) == 0:
-            return ['{}']
+            return ["{}"]
 
         max_k_width = 0
         max_v_width = 0
@@ -151,23 +148,19 @@ def struct_repr(data, key=None):
 
         lines = []
         for k, sublines in kvs:
-
             # foo : sub-0
             #       sub-1
             #   b : sub-0
             #       sub-0
 
-            lines.append(k.rjust(max_k_width) + ' : ' +
-                         sublines[0].ljust(max_v_width))
+            lines.append(k.rjust(max_k_width) + " : " + sublines[0].ljust(max_v_width))
 
-            for l in sublines[1:]:
-                lines.append(' '.rjust(max_k_width) +
-                             '   ' + l.ljust(max_v_width))
+            for line in sublines[1:]:
+                lines.append(" ".rjust(max_k_width) + "   " + line.ljust(max_v_width))
 
         return lines
 
     else:
-
         data = filter_invisible_chars(data)
         return [utf8str(data)]
 
@@ -199,30 +192,28 @@ def filter_invisible_chars(data):
     if type(data) not in (bytes, str):
         return data
 
-    return invisible_chars_re.sub('', data)
+    return invisible_chars_re.sub("", data)
 
 
 def _get_key_and_headers(keys, rows):
     if keys is None:
-
         if len(rows) == 0:
             keys = []
         else:
             r0 = rows[0]
 
-            if type(r0) == dict:
+            if type(r0) is dict:
                 keys = list(r0.keys())
                 keys.sort()
             elif type(r0) in listtype:
                 keys = [i for i in range(len(r0))]
             else:
-                keys = ['']
+                keys = [""]
 
     _keys = []
     column_headers = []
 
     for k in keys:
-
         if type(k) not in listtype:
             k = [k, k]
 
@@ -238,7 +229,7 @@ def utf8str(s):
     return str(s)
 
 
-def format_line(items, sep=' ', aligns=''):
+def format_line(items, sep=" ", aligns=""):
     """
     It formats a list in a multi row manner.
     It is compatible with colored string such as those created with `strutil.blue("blue-text")`.
@@ -273,27 +264,22 @@ def format_line(items, sep=' ', aligns=''):
     # | j is my nick |      |    |             | 2006 sina
     # |              |      |    |             | 2010 other
 
-    aligns = [x for x in aligns] + [''] * len(items)
-    aligns = aligns[:len(items)]
-    aligns = ['r' if x == 'r' else x for x in aligns]
+    aligns = [x for x in aligns] + [""] * len(items)
+    aligns = aligns[: len(items)]
+    aligns = ["r" if x == "r" else x for x in aligns]
 
-    items = [(x if type(x) in listtype else [x])
-             for x in items]
+    items = [(x if type(x) in listtype else [x]) for x in items]
 
-    items = [[_to_str(y)
-              for y in x]
-             for x in items]
+    items = [[_to_str(y) for y in x] for x in items]
 
     maxHeight = max([len(x) for x in items] + [0])
 
     def max_width(x):
-        return max([y.__len__()
-                    for y in x] + [0])
+        return max([y.__len__() for y in x] + [0])
 
     widths = [max_width(x) for x in items]
 
-    items = [(x + [''] * maxHeight)[:maxHeight]
-             for x in items]
+    items = [(x + [""] * maxHeight)[:maxHeight] for x in items]
 
     lines = []
     for i in range(maxHeight):
@@ -305,8 +291,8 @@ def format_line(items, sep=' ', aligns=''):
             actualWidth = elt.__len__()
             elt = utf8str(elt)
             if actualWidth < width:
-                padding = ' ' * (width - actualWidth)
-                if aligns[j] == 'l':
+                padding = " " * (width - actualWidth)
+                if aligns[j] == "l":
                     elt = elt + padding
                 else:
                     elt = padding + elt
@@ -320,11 +306,7 @@ def format_line(items, sep=' ', aligns=''):
     return "\n".join(lines)
 
 
-def format_table(rows,
-                 keys=None,
-                 colors=None,
-                 sep=' | ',
-                 row_sep=None):
+def format_table(rows, keys=None, colors=None, sep=" | ", row_sep=None):
     """
     Render a list of data into a table.
     Number of rows is `len(rows)`.
@@ -368,26 +350,17 @@ def format_table(rows,
     # ]
 
     # headers
-    lns = [
-        [[a + ': ']
-         for a in column_headers]
-    ]
+    lns = [[[a + ": "] for a in column_headers]]
 
     for row in rows:
-
         if row_sep is not None:
             lns.append([[None] for k in keys])
 
-        if type(row) == dict:
-
-            ln = [struct_repr(row.get(k, ''))
-                  for k in keys]
+        if type(row) is dict:
+            ln = [struct_repr(row.get(k, "")) for k in keys]
 
         elif type(row) in listtype:
-
-            ln = [struct_repr(row[int(k)])
-                  if len(row) > int(k) else ''
-                  for k in keys]
+            ln = [struct_repr(row[int(k)]) if len(row) > int(k) else "" for k in keys]
 
         else:
             ln = [struct_repr(row)]
@@ -395,23 +368,19 @@ def format_table(rows,
         lns.append(ln)
 
     def get_max_width(cols):
-        return max([len(utf8str(c[0]))
-                    for c in cols] + [0])
+        return max([len(utf8str(c[0])) for c in cols] + [0])
 
     max_widths = [get_max_width(cols) for cols in zip(*lns)]
 
     rows = []
     for row in lns:
-
         ln = []
 
         for i in range(len(max_widths)):
             color = colors[i]
             w = max_widths[i]
 
-            ln.append([k3color.Str(x.ljust(w), color)
-                       if x is not None else row_sep * w
-                       for x in row[i]])
+            ln.append([k3color.Str(x.ljust(w), color) if x is not None else row_sep * w for x in row[i]])
 
         rows.append(format_line(ln, sep=sep))
 
@@ -440,7 +409,7 @@ def _findquote(line, quote):
     n = len(line)
     escape = []
     while i < n:
-        if line[i] == '\\':
+        if line[i] == "\\":
             escape.append(i)
             i += 2
             continue
@@ -451,7 +420,7 @@ def _findquote(line, quote):
             j = i
             i += 1
             while i < n and line[i] != line[j]:
-                if line[i] == '\\':
+                if line[i] == "\\":
                     escape.append(i)
                     i += 2
                     continue
@@ -469,7 +438,7 @@ def _findquote(line, quote):
     return -1, -1, escape
 
 
-def tokenize(line, sep=None, quote='"\'', preserve=False):
+def tokenize(line, sep=None, quote="\"'", preserve=False):
     """
     :param line: the line to tokenize.
     :param sep: is None or a non-empty string separator to tokenize with.
@@ -489,14 +458,14 @@ def tokenize(line, sep=None, quote='"\'', preserve=False):
     """
 
     if sep == quote:
-        raise ValueError('diffrent sep and quote is required')
+        raise ValueError("diffrent sep and quote is required")
 
     if sep is None:
         if len(line) == 0:
             return []
         line = line.strip()
 
-    rst = ['']
+    rst = [""]
     n = len(line)
     i = 0
     while i < n:
@@ -506,10 +475,10 @@ def tokenize(line, sep=None, quote='"\'', preserve=False):
             lines = []
             x = 0
             for e in escape:
-                lines.append(line[x:i + e])
+                lines.append(line[x : i + e])
                 x = i + e + 1
             lines.append(line[x:])
-            line = ''.join(lines)
+            line = "".join(lines)
             n = len(line)
 
         if quote_s < 0:
@@ -521,9 +490,9 @@ def tokenize(line, sep=None, quote='"\'', preserve=False):
             sub_rst = line[i:sub].split(sep)
             if sep is None:
                 if line[sub - 1] in string.whitespace:
-                    sub_rst.append('')
+                    sub_rst.append("")
                 if line[i] in string.whitespace:
-                    sub_rst.insert(0, '')
+                    sub_rst.insert(0, "")
 
             head = rst.pop()
             sub_rst[0] = head + sub_rst[0]
@@ -541,9 +510,9 @@ def tokenize(line, sep=None, quote='"\'', preserve=False):
         head = rst.pop()
 
         if preserve:
-            head += line[i + quote_s:i + quote_e + 1]
+            head += line[i + quote_s : i + quote_e + 1]
         else:
-            head += line[i + quote_s + 1:i + quote_e]
+            head += line[i + quote_s + 1 : i + quote_e]
 
         rst.append(head)
         i += quote_e + 1
@@ -552,22 +521,21 @@ def tokenize(line, sep=None, quote='"\'', preserve=False):
 
 
 def parse_colon_kvs(data):
-    data = tokenize(data, quote='"\'')
+    data = tokenize(data, quote="\"'")
 
     ret = {}
     for buf in data:
-        if ':' not in buf:
-            raise ValueError('invalid arguments, arguments'
-                             'need key-val like: "k:v"')
+        if ":" not in buf:
+            raise ValueError('invalid arguments, argumentsneed key-val like: "k:v"')
 
-        k, v = buf.split(':', 1)
+        k, v = buf.split(":", 1)
 
         ret[k] = v
 
     return ret
 
 
-def page(lines, max_lines=10, control_char=True, pager=('less',)):
+def page(lines, max_lines=10, control_char=True, pager=("less",)):
     """
     Display `lines` of string in console, with a pager program (`less`) if too many
     lines.
@@ -585,22 +553,17 @@ def page(lines, max_lines=10, control_char=True, pager=('less',)):
     :return: Nothing
     """
     if len(lines) > max_lines:
-        pp = {'stdin': subprocess.PIPE,
-              'stdout': None,
-              'stderr': None}
+        pp = {"stdin": subprocess.PIPE, "stdout": None, "stderr": None}
 
         cmd_pager = list(pager)
         if control_char:
-            if pager == ('less',):
-                cmd_pager += ['-r']
+            if pager == ("less",):
+                cmd_pager += ["-r"]
 
-        subproc = subprocess.Popen(cmd_pager,
-                                     close_fds=True,
-                                     cwd='./',
-                                     **pp)
+        subproc = subprocess.Popen(cmd_pager, close_fds=True, cwd="./", **pp)
 
         try:
-            out, err = subproc.communicate(bytes('\n'.join(lines).encode("utf-8")))
+            out, err = subproc.communicate(bytes("\n".join(lines).encode("utf-8")))
         except IOError as e:
             if e[0] == errno.EPIPE:
                 pass
@@ -608,4 +571,4 @@ def page(lines, max_lines=10, control_char=True, pager=('less',)):
                 raise
         subproc.wait()
     else:
-        os.write(1, bytes(('\n'.join(lines) + "\n").encode("utf-8")))
+        os.write(1, bytes(("\n".join(lines) + "\n").encode("utf-8")))
