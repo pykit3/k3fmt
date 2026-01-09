@@ -439,7 +439,7 @@ def _findquote(line, quote):
 
 
 def tokenize(line, sep=None, quote="\"'", preserve=False):
-    """
+    r"""
     :param line: the line to tokenize.
     :param sep: is None or a non-empty string separator to tokenize with.
     If sep is None, runs of consecutive whitespace are regarded as a single
