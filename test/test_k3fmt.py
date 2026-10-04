@@ -1,9 +1,11 @@
 import os
 import unittest
-import k3ut
-import k3fmt
+
 import k3color
 import k3proc
+import k3ut
+
+import k3fmt
 
 dd = k3ut.dd
 
@@ -45,9 +47,7 @@ class TestK3fmt(unittest.TestCase):
             self.assertEqual(
                 _out,
                 rst,
-                ("input: {_in}, output: {_out}, expected: {rst}, message: {_mes}").format(
-                    _in=repr(_in), _out=repr(_out), rst=repr(rst), _mes=_mes
-                ),
+                f"input: {_in!r}, output: {_out!r}, expected: {rst!r}, message: {_mes}",
             )
 
     def test_format_table(self):
@@ -90,10 +90,12 @@ class TestK3fmt(unittest.TestCase):
             "acl:               | bucket:    | bucket_id:          | num_used:  | owner:  | space_used:  | ts:                ",
             "{}                 | game1.read | 1400000000000689036 | 0          | game1   | 0            | 1492091893065708032",
             "{}                 | game2.read | 1510000000000689037 | 0          | game2   | 0            | 1492091906629786880",
-            "imgx : - READ      | imgx-test  | 1910000000000689048 | 0          | imgx    | 0            | 1492101189213795840\n"
-            "       - READ_ACP  |            |                     |            |         |              |                    \n"
-            "       - WRITE     |            |                     |            |         |              |                    \n"
-            "       - WRITE_ACP |            |                     |            |         |              |                    ",
+            (
+                "imgx : - READ      | imgx-test  | 1910000000000689048 | 0          | imgx    | 0            | 1492101189213795840\n"
+                "       - READ_ACP  |            |                     |            |         |              |                    \n"
+                "       - WRITE     |            |                     |            |         |              |                    \n"
+                "       - WRITE_ACP |            |                     |            |         |              |                    "
+            ),
         ]
         self.assertEqual(expected, rst)
 
@@ -297,9 +299,7 @@ class TestK3fmt(unittest.TestCase):
             self.assertEqual(
                 _out,
                 rst,
-                ("input: {_in}, output: {_out}, expected: {rst}, message: {_mes}").format(
-                    _in=repr(_in), _out=repr(_out), rst=repr(rst), _mes=_mes
-                ),
+                f"input: {_in!r}, output: {_out!r}, expected: {rst!r}, message: {_mes}",
             )
 
     def test_tokenize(self):
@@ -340,9 +340,7 @@ class TestK3fmt(unittest.TestCase):
             self.assertEqual(
                 _out,
                 rst,
-                ("input: {_in}, output: {_out}, expected: {rst}, message: {_mes}").format(
-                    _in=repr(_in), _out=repr(_out), rst=repr(rst), _mes=_mes
-                ),
+                f"input: {_in!r}, output: {_out!r}, expected: {rst!r}, message: {_mes}",
             )
 
         sep_cases = (
@@ -432,7 +430,7 @@ class TestK3fmt(unittest.TestCase):
             "python",
             "page_it.py",
             # pager, control_char, max_lines
-            " ".join(["python", "raw_pager.py", ">"]),
+            "python raw_pager.py >",
             "0",
             "2",
             "1",
@@ -451,7 +449,7 @@ class TestK3fmt(unittest.TestCase):
             "python",
             "page_it.py",
             # pager, control_char, max_lines
-            " ".join(["python", "raw_pager.py", ">"]),
+            "python raw_pager.py >",
             "0",
             "2",
             "1",

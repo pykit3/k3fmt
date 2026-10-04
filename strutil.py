@@ -1,14 +1,15 @@
-import re
-import os
 import errno
+import os
+import re
 import string
 import subprocess
+
 import k3color
 
 listtype = (tuple, list)
 
-invisible_chars = "".join(map(chr, list(range(0, 32))))
-invisible_chars_re = re.compile("[%s]" % re.escape(invisible_chars))
+invisible_chars = "".join(map(chr, list(range(32))))
+invisible_chars_re = re.compile(f"[{re.escape(invisible_chars)}]")
 
 
 def break_line(linestr, width):
@@ -62,9 +63,7 @@ def line_pad(linestr, padding=""):
 def _to_str(y):
     if isinstance(y, k3color.Str):
         pass
-    elif isinstance(y, int):
-        y = str(y)
-    elif isinstance(y, listtype):
+    elif isinstance(y, (int, listtype)):
         y = str(y)
 
     return y
@@ -104,8 +103,7 @@ def struct_repr(data, key=None):
             sublines = struct_repr(elt)
             sublines_max_width = max([len(x) for x in sublines])
 
-            if max_width < sublines_max_width:
-                max_width = sublines_max_width
+            max_width = max(max_width, sublines_max_width)
 
             elt_lines.append(sublines)
 
@@ -136,11 +134,9 @@ def struct_repr(data, key=None):
             sublines = struct_repr(v)
             sublines_max_width = max([len(x) for x in sublines])
 
-            if max_k_width < len(k):
-                max_k_width = len(k)
+            max_k_width = max(max_k_width, len(k))
 
-            if max_v_width < sublines_max_width:
-                max_v_width = sublines_max_width
+            max_v_width = max(max_v_width, sublines_max_width)
 
             kvs.append((k, sublines))
 
@@ -556,15 +552,14 @@ def page(lines, max_lines=10, control_char=True, pager=("less",)):
         pp = {"stdin": subprocess.PIPE, "stdout": None, "stderr": None}
 
         cmd_pager = list(pager)
-        if control_char:
-            if pager == ("less",):
-                cmd_pager += ["-r"]
+        if control_char and pager == ("less",):
+            cmd_pager += ["-r"]
 
         subproc = subprocess.Popen(cmd_pager, close_fds=True, cwd="./", **pp)
 
         try:
-            out, err = subproc.communicate(bytes("\n".join(lines).encode("utf-8")))
-        except IOError as e:
+            subproc.communicate(bytes("\n".join(lines).encode("utf-8")))
+        except OSError as e:
             if e[0] == errno.EPIPE:
                 pass
             else:

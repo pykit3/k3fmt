@@ -20,33 +20,27 @@ pip install k3fmt
 import k3fmt
 
 lines = [
-    'hello',
-    'world',
+    "hello",
+    "world",
 ]
 
 # add left padding to each line in a string
-k3fmt.line_pad('\n'.join(lines), ' ' * 4)
+k3fmt.line_pad("\n".join(lines), " " * 4)
 # "    hello"
 # "    world"
 
 
 # format a multi-row line
-items = ['name:',
-         ['John',
-          'j is my nick'
-          ],
+items = [
+    "name:",
+    ["John", "j is my nick"],
+    "age:",
+    26,
+    "experience:",
+    ["2000 THU", "2006 sina", "2010 other"],
+]
 
-         'age:',
-         26,
-
-         'experience:',
-         ['2000 THU',
-          '2006 sina',
-          '2010 other'
-          ],
-         ]
-
-k3fmt.format_line(items, sep=' | ', aligns='llllll')
+k3fmt.format_line(items, sep=" | ", aligns="llllll")
 # outputs:
 #    name: | John         | age: | 26 | experience: | 2000 THU
 #          | j is my nick |      |    |             | 2006 sina
