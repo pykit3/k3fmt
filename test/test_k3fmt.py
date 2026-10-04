@@ -1,5 +1,7 @@
+import errno
 import os
 import unittest
+from unittest import mock
 
 import k3color
 import k3proc
@@ -463,3 +465,13 @@ class TestK3fmt(unittest.TestCase):
 
         self.assertEqual(0, returncode)
         self.assertEqual("> 1\n> 2\n> 3\n", out)
+
+    def test_page_pager_error_propagates(self):
+        err = OSError(errno.EIO, "pager failed")
+        with mock.patch("subprocess.Popen") as popen:
+            popen.return_value.communicate.side_effect = err
+
+            with self.assertRaises(OSError) as ctx:
+                k3fmt.page(["1", "2", "3"], max_lines=1, pager=("cat",))
+
+        self.assertIs(err, ctx.exception)

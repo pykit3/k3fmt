@@ -1,4 +1,3 @@
-import errno
 import os
 import re
 import string
@@ -557,13 +556,7 @@ def page(lines, max_lines=10, control_char=True, pager=("less",)):
 
         subproc = subprocess.Popen(cmd_pager, close_fds=True, cwd="./", **pp)
 
-        try:
-            subproc.communicate(bytes("\n".join(lines).encode("utf-8")))
-        except OSError as e:
-            if e[0] == errno.EPIPE:
-                pass
-            else:
-                raise
+        subproc.communicate(bytes("\n".join(lines).encode("utf-8")))
         subproc.wait()
     else:
         os.write(1, bytes(("\n".join(lines) + "\n").encode("utf-8")))
