@@ -25,9 +25,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-    "k3ut",
     "k3color",
-    "k3proc",
 ]
 
 [project.urls]
@@ -39,6 +37,8 @@ dev = [
     "pytest>=7.0",
     "ruff",
     "coverage",
+    "k3ut",
+    "k3proc",
 ]
 publish = [
     "build",
