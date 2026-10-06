@@ -9,6 +9,7 @@ listtype = (tuple, list)
 
 invisible_chars = "".join(map(chr, list(range(32))))
 invisible_chars_re = re.compile(f"[{re.escape(invisible_chars)}]")
+invisible_bytes_re = re.compile(b"[" + re.escape(invisible_chars.encode()) + b"]")
 
 
 def break_line(linestr, width):
@@ -186,6 +187,9 @@ def filter_invisible_chars(data):
     # u''
     if type(data) not in (bytes, str):
         return data
+
+    if isinstance(data, bytes):
+        return invisible_bytes_re.sub(b"", data)
 
     return invisible_chars_re.sub("", data)
 

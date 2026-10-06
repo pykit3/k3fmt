@@ -184,6 +184,8 @@ class TestK3fmt(unittest.TestCase):
             ("\x00\x01\x02\x03\x04\005", ""),
             (None, None),
             ("", ""),
+            (b"1273883926293937729\000\001\031", b"1273883926293937729"),
+            (b"\x00\x01\x02\x03\x04\005", b""),
         )
 
         for case, expected in cases:
