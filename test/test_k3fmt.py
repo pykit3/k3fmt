@@ -306,6 +306,11 @@ class TestK3fmt(unittest.TestCase):
                 f"input: {_in!r}, output: {_out!r}, expected: {rst!r}, message: {_mes}",
             )
 
+    def test_line_pad_bytes(self):
+        # The lines are str, so a bytes padding is rejected before it is added to them.
+        with self.assertRaisesRegex(TypeError, "padding must be str or callable"):
+            k3fmt.line_pad("a\nb", b"> ")
+
     def test_tokenize(self):
         base_cases = (
             ("", [""], ""),

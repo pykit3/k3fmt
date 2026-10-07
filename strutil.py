@@ -47,9 +47,12 @@ def line_pad(linestr, padding=""):
 
     :return: multiple line string with `\n` as line separator, with left padding added.
     """
+    if isinstance(padding, bytes):
+        raise TypeError(f"padding must be str or callable, but: {padding!r}")
+
     lines = linestr.split("\n")
 
-    if type(padding) in (str, bytes):
+    if type(padding) is str:
         lines = [padding + x for x in lines]
 
     elif callable(padding):
