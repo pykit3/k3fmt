@@ -396,7 +396,7 @@ def _get_colors(colors, col_n):
     colors = colors or ([None] * col_n)
 
     while len(colors) < col_n:
-        colors.extend(colors)
+        colors = colors + colors
 
     colors = colors[:col_n]
 

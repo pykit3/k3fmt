@@ -148,6 +148,11 @@ class TestK3fmt(unittest.TestCase):
         ]
         self.assertEqual(expected, rst)
 
+        # colors repeat for the columns after them, and the caller's list stays unchanged
+        colors = ["red"]
+        k3fmt.format_table([[1, 2, 3]], colors=colors)
+        self.assertEqual(["red"], colors)
+
     def test_struct_repr(self):
         inp = {
             1: 3,
