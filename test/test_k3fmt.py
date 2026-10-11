@@ -148,6 +148,16 @@ class TestK3fmt(unittest.TestCase):
         ]
         self.assertEqual(expected, rst)
 
+        # an empty row renders a line of empty cells
+        rst = k3fmt.format_table([[1, 2], []])
+        dd_lines(rst)
+        expected = [
+            "0:  | 1: ",
+            "1   | 2  ",
+            "    |    ",
+        ]
+        self.assertEqual(expected, rst)
+
         # colors repeat for the columns after them, and the caller's list stays unchanged
         colors = ["red"]
         k3fmt.format_table([[1, 2, 3]], colors=colors)
