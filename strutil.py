@@ -268,7 +268,6 @@ def format_line(items, sep=" ", aligns=""):
 
     aligns = [x for x in aligns] + [""] * len(items)
     aligns = aligns[: len(items)]
-    aligns = ["r" if x == "r" else x for x in aligns]
 
     items = [(x if type(x) in listtype else [x]) for x in items]
 
