@@ -362,7 +362,7 @@ def format_table(rows, keys=None, colors=None, sep=" | ", row_sep=None):
             ln = [struct_repr(row.get(k, "")) for k in keys]
 
         elif type(row) in listtype:
-            ln = [struct_repr(row[int(k)]) if len(row) > int(k) else "" for k in keys]
+            ln = [struct_repr(row[int(k)]) if len(row) > int(k) else [""] for k in keys]
 
         else:
             ln = [struct_repr(row)]

@@ -138,6 +138,16 @@ class TestK3fmt(unittest.TestCase):
         ]
         self.assertEqual(expected, rst)
 
+        # a list row shorter than the first row renders empty cells
+        rst = k3fmt.format_table([[1, 2], [3]])
+        dd_lines(rst)
+        expected = [
+            "0:  | 1: ",
+            "1   | 2  ",
+            "3   |    ",
+        ]
+        self.assertEqual(expected, rst)
+
     def test_struct_repr(self):
         inp = {
             1: 3,
