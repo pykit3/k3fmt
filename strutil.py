@@ -66,7 +66,8 @@ def line_pad(linestr, padding=""):
 def _to_str(y):
     if isinstance(y, k3color.Str):
         pass
-    elif isinstance(y, (int, listtype)):
+    # utf8str() decodes bytes when the line is rendered.
+    elif not isinstance(y, (str, bytes)):
         y = str(y)
 
     return y
@@ -239,6 +240,7 @@ def format_line(items, sep=" ", aligns=""):
     Each element could be a `string` or a `list` of `string`.
     If it is a `list` of `string`, it would be rendered as a multi-row
     element.
+    Any other value, such as a number or `None`, is rendered as `str()` renders it.
     :param sep: specifies the separator between each element in a line.
     By default it is a single space `" "`.
     :param aligns: specifies alignment for each element.

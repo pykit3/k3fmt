@@ -38,6 +38,16 @@ class TestK3fmt(unittest.TestCase):
                 " a|foo| 1\nbc|   | 2\n  |   |" + str(k3color.blue("xp")),
                 "k3color.Str instance is compatible",
             ),
+            (
+                ([1.5, None, True], "|", ""),
+                "1.5|None|True",
+                "float, None and bool are converted with str()",
+            ),
+            (
+                ([[0.5, None], b"x"], "|", ""),
+                " 0.5|x\nNone| ",
+                "bytes are decoded, other values are converted with str()",
+            ),
         )
 
         for _in, _out, _mes in cases:
